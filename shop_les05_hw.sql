@@ -44,20 +44,28 @@ SELECT value FROM storehouses_products ORDER BY value = 0, value ASC;
 /*4. (по желанию) Из таблицы users необходимо извлечь пользователей, родившихся в августе и мае. 
 Месяцы заданы в виде списка английских названий (may, august)*/
 
--- INSERT INTO users (name, birthday_at, created_at, updated_at) VALUES 
--- 	('Valentin', '1981-10-15', NOW(), NOW()),
--- 	('Svetlana', '1981-12-27', NOW(), NOW()),
--- 	('Artemiy', '2010-12-27', NOW(), NOW()),
--- 	('Taisiya', '2015-10-28', NOW(), NOW());
+-- не успел
 
 /*5. (по желанию) Из таблицы catalogs извлекаются записи при помощи запроса. 
 SELECT * FROM catalogs WHERE id IN (5, 1, 2); Отсортируйте записи в порядке, заданном в списке IN.*/
+
+-- не успел
 
 -- УРОК 5: Практическое задание по теме «Агрегация данных»
 
 /*1. Подсчитайте средний возраст пользователей в таблице users.*/
 
+-- считаем возраст пользователей
+SELECT name, TIMESTAMPDIFF(YEAR, birthday_at, NOW()) AS age FROM users;
+-- считаем средний возраст
+SELECT AVG(TIMESTAMPDIFF(YEAR, birthday_at, NOW())) AS average_age FROM users;
+
 /*2. Подсчитайте количество дней рождения, которые приходятся на каждый из дней недели. 
 Следует учесть, что необходимы дни недели текущего года, а не года рождения.*/
 
+SELECT COUNT(*) AS numb, DAYNAME(birthday_at) AS weekday_year FROM users GROUP BY weekday_year; 
+-- не знаю как учесть дни недели текущего года
+
 /*3. (по желанию) Подсчитайте произведение чисел в столбце таблицы.*/
+
+-- не успел
