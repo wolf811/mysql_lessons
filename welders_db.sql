@@ -23,11 +23,6 @@ CREATE TABLE welders (
 	INDEX welders_company_idx(company),
 	INDEX welders_firstname_lastname_birthday_idx(firstname, lastname, birthday)
 ) COMMENT 'сварщики';
--- DDL
-INSERT INTO welders (id, firstname, lastname, birthday, company, position_work) VALUES (DEFAULT,'Valentin','Kombarov', '1981-10-15', NULL, NULL);
-UPDATE welders SET company = 'ООО "НЕДК"', position_work = 'электрогазосварщик 4 разряда' WHERE id = 31;
-SELECT id, firstname FROM welders WHERE firstname LIKE 'Val%';
-DELETE FROM welders WHERE firstname LIKE 'Val%';
 
 DROP TABLE IF EXISTS kleymo;
 CREATE TABLE kleymo (
@@ -36,7 +31,6 @@ CREATE TABLE kleymo (
 	created_at DATETIME DEFAULT NOW(),
 	FOREIGN KEY (welder_id) REFERENCES welders(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) comment 'клеймо сварщика';
-ALTER TABLE welders ADD 
 
 -- УДОСТОВЕРЕНИЯ
 DROP TABLE IF EXISTS certificates;
@@ -68,7 +62,6 @@ CREATE TABLE certificates (
 DROP TABLE IF EXISTS type_cert;
 CREATE TABLE type_cert (
 	id SERIAL PRIMARY KEY,
--- 	name ENUM('первичная', 'дополнительная', 'продление') UNIQUE
 	name CHAR(20) UNIQUE
 ) COMMENT 'вид аттестации';
 
@@ -124,6 +117,8 @@ CREATE TABLE centers (
 	FOREIGN KEY (welding_method_id) REFERENCES welding_method(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (gtu_id) REFERENCES gtu(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COMMENT 'аттестационные центры';
+
+SELECT cipher,city FROM centers;
 
 
 
