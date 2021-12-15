@@ -32,6 +32,67 @@ CREATE TABLE kleymo (
 	FOREIGN KEY (welder_id) REFERENCES welders(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) comment 'клеймо сварщика';
 
+DROP TABLE IF EXISTS type_cert;
+CREATE TABLE type_cert (
+	id SERIAL PRIMARY KEY,
+	name CHAR(20) UNIQUE
+) COMMENT 'вид аттестации';
+
+-- СПРАВОЧНИКИ ДЛЯ ОБЛАСТИ АТТЕСТАЦИИ
+DROP TABLE IF EXISTS level_cert;
+CREATE TABLE level_cert (
+	id SERIAL PRIMARY KEY,
+-- 	name SET('I', 'II', 'III', 'IV') UNIQUE
+	name CHAR(20) UNIQUE
+) COMMENT 'уровень аттестации';
+
+DROP TABLE IF EXISTS welding_method;
+CREATE TABLE welding_method (
+	id SERIAL PRIMARY KEY,
+	short_name CHAR(20),
+	full_name VARCHAR (255)
+) COMMENT 'способ сварки';
+
+DROP TABLE IF EXISTS gtu;
+CREATE TABLE gtu (
+id SERIAL PRIMARY KEY,
+short_name CHAR(20),
+full_name VARCHAR (255)
+) COMMENT 'группы технических устройств';
+
+-- ОБЛАСТЬ АТТЕСТАЦИИ
+DROP TABLE IF EXISTS area_cert;
+CREATE TABLE area_cert (
+	level_cert_id BIGINT UNSIGNED NOT NULL COMMENT 'уровень',
+	welding_method_id BIGINT UNSIGNED NOT NULL COMMENT 'способ сварки',
+	gtu_id BIGINT UNSIGNED NOT NULL COMMENT 'группа технических усройств',
+	PRIMARY KEY (level_cert_id, welding_method_id, gtu_id),
+	
+	FOREIGN KEY (level_cert_id) REFERENCES level_cert(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	FOREIGN KEY (welding_method_id) REFERENCES welding_method(id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	FOREIGN KEY (gtu_id) REFERENCES gtu(id) ON DELETE NO ACTION ON UPDATE NO ACTION
+) COMMENT 'область аттестации';
+
+-- МЕСТО АТТЕСТАЦИИ
+DROP TABLE IF EXISTS centers;
+CREATE TABLE centers (
+	id SERIAL PRIMARY KEY,
+	cipher CHAR(20) UNIQUE COMMENT 'шифр аттестационного центра',
+	name_org VARCHAR(100) COMMENT 'название организации',
+	city VARCHAR(100) COMMENT 'местонахождение центра',
+	level_cert_id BIGINT UNSIGNED NOT NULL,
+	welding_method_id BIGINT UNSIGNED NOT NULL,
+	gtu_id BIGINT UNSIGNED NOT NULL,
+	
+	INDEX cipher_name_org_city_idx(cipher, name_org, city),
+	
+	FOREIGN KEY (level_cert_id) REFERENCES level_cert(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (welding_method_id) REFERENCES welding_method(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (gtu_id) REFERENCES gtu(id) ON DELETE CASCADE ON UPDATE CASCADE
+) COMMENT 'аттестационные центры';
+
+SELECT cipher,city FROM centers;
+
 -- УДОСТОВЕРЕНИЯ
 DROP TABLE IF EXISTS certificates;
 CREATE TABLE certificates (
@@ -58,68 +119,5 @@ CREATE TABLE certificates (
 	FOREIGN KEY (welding_method_id) REFERENCES welding_method(id) ON DELETE SET NULL ON UPDATE SET NULL,
 	FOREIGN KEY (gtu_id) REFERENCES gtu(id) ON DELETE SET NULL ON UPDATE SET NULL
 ) COMMENT 'удостоверение сварщика';
-
-DROP TABLE IF EXISTS type_cert;
-CREATE TABLE type_cert (
-	id SERIAL PRIMARY KEY,
-	name CHAR(20) UNIQUE
-) COMMENT 'вид аттестации';
-
--- ОБЛАСТЬ АТТЕСТАЦИИ
-DROP TABLE IF EXISTS area_cert;
-CREATE TABLE area_cert (
-	level_cert_id BIGINT UNSIGNED NOT NULL COMMENT 'уровень',
-	welding_method_id BIGINT UNSIGNED NOT NULL COMMENT 'способ сварки',
-	gtu_id BIGINT UNSIGNED NOT NULL COMMENT 'группа технических усройств',
-	PRIMARY KEY (level_cert_id, welding_method_id, gtu_id),
-	
-	FOREIGN KEY (level_cert_id) REFERENCES level_cert(id) ON DELETE SET DEFAULT ON UPDATE SET DEFAULT,
-	FOREIGN KEY (welding_method_id) REFERENCES welding_method(id) ON DELETE SET DEFAULT ON UPDATE SET DEFAULT,
-	FOREIGN KEY (gtu_id) REFERENCES gtu(id) ON DELETE SET DEFAULT ON UPDATE SET DEFAULT
-) COMMENT 'область аттестации';
-
--- СПРАВОЧНИКИ ДЛЯ ОБЛАСТИ АТТЕСТАЦИИ
-DROP TABLE IF EXISTS level_cert;
-CREATE TABLE level_cert (
-	id SERIAL PRIMARY KEY,
--- 	name SET('I', 'II', 'III', 'IV') UNIQUE
-	name CHAR(20) UNIQUE
-) COMMENT 'уровень аттестации';
-
-DROP TABLE IF EXISTS welding_method;
-CREATE TABLE welding_method (
-	id SERIAL PRIMARY KEY,
-	short_name CHAR(20),
-	full_name VARCHAR (255)
-) COMMENT 'способ сварки';
-
-DROP TABLE IF EXISTS gtu;
-CREATE TABLE gtu (
-id SERIAL PRIMARY KEY,
-short_name CHAR(20),
-full_name VARCHAR (255)
-) COMMENT 'группы технических устройств';
-
--- МЕСТО АТТЕСТАЦИИ
-DROP TABLE IF EXISTS centers;
-CREATE TABLE centers (
-	id SERIAL PRIMARY KEY,
-	cipher CHAR(20) UNIQUE COMMENT 'шифр аттестационного центра',
-	name_org VARCHAR(100) COMMENT 'название организации',
-	city VARCHAR(100) COMMENT 'местонахождение центра',
-	level_cert_id BIGINT UNSIGNED NOT NULL,
-	welding_method_id BIGINT UNSIGNED NOT NULL,
-	gtu_id BIGINT UNSIGNED NOT NULL,
-	
-	INDEX cipher_name_org_city_idx(cipher, name_org, city),
-	
-	FOREIGN KEY (level_cert_id) REFERENCES level_cert(id) ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (welding_method_id) REFERENCES welding_method(id) ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (gtu_id) REFERENCES gtu(id) ON DELETE CASCADE ON UPDATE CASCADE
-) COMMENT 'аттестационные центры';
-
-SELECT cipher,city FROM centers;
-
-
 
 

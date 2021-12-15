@@ -16,7 +16,7 @@ INSERT INTO `welders` VALUES
 (12,'Sherwood','Nikolaus','1981-01-10','Effertz, Steuber and Gleichner','Quis sequi neque est impedit.'),
 (13,'Austin','Smith','2000-06-19','Funk Ltd','Et nisi delectus aspernatur voluptates.'),
 (14,'Hilton','Conn','1982-07-31','Ankunding-Aufderhar','Saepe repellendus ea cupiditate nisi.'),
-(15,'Leta','Lebsack','1972-08-04','White, Friesen and O\'Conner','Voluptatem deleniti aliquam quisquam autem voluptas.'),
+(15,'Leta','Lebsack','1972-08-04','White, Friesen and Conner','Voluptatem deleniti aliquam quisquam autem voluptas.'),
 (16,'Kenny','Will','2001-08-26','Lindgren-Dietrich','Ducimus nemo laboriosam ut consequatur.'),
 (17,'Garrison','Quigley','2007-10-16','Leuschke Group','Ea maxime impedit eos quasi enim id.'),
 (18,'Trudie','Aufderhar','1991-07-04','Ryan, Breitenberg and Cartwright','Nihil quae sed fugit quae.'),
